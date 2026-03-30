@@ -2,43 +2,292 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Урок 6: Разбор 12 задания</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Задание 15 | Алгоритмы для исполнителя</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
+            background: radial-gradient(circle at 10% 20%, #1a0f2a, #0b0715);
+            font-family: 'Inter', sans-serif;
+            color: #f0eef7;
+            line-height: 1.5;
         }
-        
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%;
-            padding-top: 30px;
-            height: 0;
-            overflow: hidden;
-            margin-bottom: 30px;
-            background: #f0f0f0;
+        .bg-glow {
+            position: fixed;
+            top: -20%;
+            left: -20%;
+            width: 140%;
+            height: 140%;
+            background: radial-gradient(circle, rgba(180, 0, 200, 0.12) 0%, rgba(0,0,0,0) 70%);
+            pointer-events: none;
+            z-index: 0;
+            animation: rotate 30s infinite linear;
         }
-        
-        .video-container iframe {
-            position: absolute;
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        header {
+            backdrop-filter: blur(12px);
+            background: rgba(20, 10, 35, 0.7);
+            border-bottom: 1px solid rgba(200, 100, 255, 0.3);
+            position: sticky;
             top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            z-index: 100;
         }
-        
-        .lesson-text {
-            line-height: 1.6;
+        nav {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .logo {
+            font-weight: 800;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #e879f9, #a855f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        .nav-links a {
+            color: #cdc4e6;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .nav-links a:hover {
+            color: #e879f9;
+        }
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #fff, #e879f9);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .subtitle {
+            color: #b9aee3;
+            margin-bottom: 1.5rem;
+        }
+        .iframe-container {
+            background: #0b0715;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            margin: 1.5rem 0;
+            box-shadow: 0 0 20px rgba(168,85,247,0.3);
+        }
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        .nav-buttons button, .nav-buttons a {
+            background: rgba(168,85,247,0.3);
+            border: none;
+            color: #e879f9;
+            padding: 0.6rem 1.2rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .nav-buttons button:hover, .nav-buttons a:hover {
+            background: #e879f9;
+            color: #0b0715;
+        }
+        .lesson-list {
+            background: rgba(30, 20, 50, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 1.5rem;
+            padding: 1rem;
+            margin-top: 2rem;
+            border: 1px solid rgba(168,85,247,0.3);
+        }
+        .lesson-list h3 {
+            margin-bottom: 1rem;
+        }
+        .lesson-list ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+        .lesson-list li {
+            background: rgba(168,85,247,0.2);
+            border-radius: 2rem;
+            padding: 0.4rem 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .lesson-list li.active {
+            background: #e879f9;
+            color: #0b0715;
+        }
+        .lesson-list li:hover {
+            background: rgba(232,121,249,0.5);
+        }
+        footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid rgba(168,85,247,0.2);
+            color: #9b8ccb;
+        }
+        @media (max-width: 760px) {
+            h1 { font-size: 1.6rem; }
+            nav { flex-direction: column; }
+            iframe { height: 400px; }
+            .container { padding: 1rem; }
         }
     </style>
 </head>
 <body>
-    <h1>Урок 6: Разбор 12 задания</h1>
-    
-    <div class="video-container">
-        <iframe src="https://vk.com/video_ext.php?oid=-236134792&id=456239018&hash=5fbecea2f1c64bea&autoplay=1" width="853" height="480" style="background-color: #000" allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;" frameborder="0" allowfullscreen></iframe>
+<div class="bg-glow"></div>
+<header>
+    <nav>
+        <a href="https://Vasilekyanina-source.github.io/" class="logo">КодОГЭ</a>
+        <div class="nav-links">
+            <a href="https://Vasilekyanina-source.github.io/#about">О курсе</a>
+            <a href="https://Vasilekyanina-source.github.io/#lessons">Уроки</a>
+        </div>
+</nav>
+</header>
+<main>
+    <div class="container">
+        <h1>📁 Задание 15. Создание и выполнение программ для исполнителя</h1>
+        <div class="subtitle">В этом разделе вы научитесь решать 15 задание из ОГЭ. Сначала необходимо разобрать теорию, а затем уже переходить к практике. Удачи!</div>
+        <div class="lesson-list">
+                    <h3>📖 Уроки задания 13.2:</h3>
+                    <ul id="lessonsList">
+                        <li data-index="0" data-path="1. Набор и редактирование/index.html">1. Понятие алгоритма и исполнителя</li>
+                        <li data-index="1" data-path="2. Форматирование символов.html">2. Свойства алгоритма</li>
+                        <li data-index="2" data-path="3. Форматирование абзацев.html">3. Способы записи алгоритмов</li>
+                        <li data-index="3" data-path="Форматирование страниц.html">4. Следование</li>
+                        <li data-index="4" data-path="5. Построение диаграмм/index.html">5. Ветвление</li>
+                        <li data-index="5" data-path="Разбор 13_2.html">6. Цикл пока</li>
+                        <li data-index="6" data-path="Разбор 13_2.html">7. Цикл до и цикл n раз</li>
+                        <li data-index="7" data-path="Разбор 13_2.html">8. Цикл для</li>
+                        <li data-index="8" data-path="Разбор 13_2.html">9. Разбор 15 задания</li>
+                    </ul>
+        </div>
+        <div class="iframe-container">
+            <iframe id="lessonFrame" src="1. Файл и имя файла/index.html" title="Урок ActivePresenter"></iframe>
+        </div>
+
+        <div class="navigation">
+            <div class="nav-buttons">
+                <button id="prevLesson" disabled>← Предыдущий урок</button>
+                <button id="nextLesson">Следующий урок →</button>
+            </div>
+            <div class="nav-buttons">
+                <a href="https://Vasilekyanina-source.github.io/">🏠 На главную</a>
+            </div>
+        </div>
+
+        
     </div>
+</main>
+<footer>
+    <p>КодОГЭ — бесплатная подготовка к экзамену</p>
+</footer>
+<script>
+    const lessons = [
+        { name: "1. Понятие алгоритма и исполнителя", path: "1. Набор и редактирование/index.html" },
+        { name: "2. Свойства алгоритма", path: "2. Форматирование символов.html" },
+        { name: "3. Способы записи алгоритмов", path: "3. Форматирование абзацев.html" },
+        { name: "4. Следование", path: "Форматирование страниц.html" },
+        { name: "5. Ветвление", path: "5. Построение диаграмм/index.html" },
+        { name: "6. Цикл пока", path: "Разбор 13_2.html" },
+        { name: "7. Цикл до и цикл n раз", path: "Разбор 13_2.html" },
+        { name: "8. Цикл для", path: "Разбор 13_2.html" },
+        { name: "9. Разбор 15 задания", path: "Разбор 13_2.html" }        
+    ];
+
+    let currentIndex = 0;
+    const iframe = document.getElementById('lessonFrame');
+    const prevBtn = document.getElementById('prevLesson');
+    const nextBtn = document.getElementById('nextLesson');
+    const lessonList = document.getElementById('lessonsList');
+
+    function updateLesson() {
+        iframe.src = lessons[currentIndex].path;
+        // Активный элемент в списке
+        Array.from(lessonList.children).forEach((li, idx) => {
+            if (idx === currentIndex) li.classList.add('active');
+            else li.classList.remove('active');
+        });
+        // Состояние кнопок
+        prevBtn.disabled = currentIndex === 0;
+        nextBtn.disabled = currentIndex === lessons.length - 1;
+        // Сохраняем текущий урок в localStorage, чтобы при перезагрузке страницы оставаться на том же уроке
+        localStorage.setItem('zadanie12_current', currentIndex);
+    }
+
+    prevBtn.addEventListener('click', () => {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateLesson();
+        }
+    });
+    nextBtn.addEventListener('click', () => {
+        if (currentIndex < lessons.length - 1) {
+            currentIndex++;
+            updateLesson();
+        }
+    });
+
+    // Клик по элементу списка
+    lessonList.addEventListener('click', (e) => {
+        const li = e.target.closest('li');
+        if (li && li.dataset.index !== undefined) {
+            currentIndex = parseInt(li.dataset.index);
+            updateLesson();
+        }
+    });
+
+    // Восстанавливаем последний открытый урок
+    const saved = localStorage.getItem('zadanie12_current');
+    if (saved !== null && saved >= 0 && saved < lessons.length) {
+        currentIndex = parseInt(saved);
+    }
+    updateLesson();
+</script>
 </body>
 </html>
